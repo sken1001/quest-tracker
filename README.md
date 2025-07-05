@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+繰り返しタスク管理アプリ
 
-## Getting Started
+日々の繰り返しタスク（デイリー、ウィークリー、マンスリー）を管理し、達成状況を可視化することで、日々の生活をサポートするためのWebアプリケーションです。
 
-First, run the development server:
+主な機能
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+このアプリケーションは、まず「お試し」として、ログインなしで全ての基本機能を利用できます。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    タスク管理 (CRUD):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+        周期（デイリー/ウィークリー/マンスリー）ごとのタスクを登録、表示、完了、削除できます。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+        各周期のタスクを一括でリセットする機能も備えています。
 
-## Learn More
+    データ永続化:
 
-To learn more about Next.js, take a look at the following resources:
+        非ログイン時は、全てのデータがブラウザのローカルストレージに安全に保存されます。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    データ管理:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+        ローカルのタスクデータを、JSONファイルとしてバックアップ（エクスポート）したり、復元（インポート）したりできます。
 
-## Deploy on Vercel
+    達成状況の可視化:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+        Chart.jsを使用し、周期ごとのタスク達成率をドーナツグラフで直感的に把握できます。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+今後のロードマップ
+
+現在は、ブラウザのローカルストレージで動作する基本機能が実装されています。
+次のステップとして、以下の機能の実装を予定しています。
+
+    ユーザー認証機能: Supabaseを利用した、ソーシャルログイン機能。
+
+    データ同期機能: ログインユーザーのタスクデータを、データベース上で管理し、複数デバイスから利用可能にする。
+
+    カテゴリ管理機能: タスクを「仕事」「プライベート」などに分類する機能。
+
+🛠️ 使用技術
+
+    フレームワーク: Next.js (App Router)
+
+    言語: TypeScript
+
+    スタイリング: Tailwind CSS
+
+    データ可視化: Chart.js
+
+    デプロイ: Vercel（予定）
+
+🚀 ローカル環境での起動方法
+
+このリポジトリをクローンします。
+
+    git clone https://github.com/sken1001/quest-tracker.git
+
+プロジェクトディレクトリに移動します。
+    
+    cd quest-tracker
+    
+必要なパッケージをインストールします。
+    
+    npm install
+
+開発サーバーを起動します。
+
+    npm run dev
+
+ブラウザで http://localhost:3000 を開きます。
+
