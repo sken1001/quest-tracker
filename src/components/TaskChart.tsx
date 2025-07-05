@@ -23,8 +23,8 @@ export default function TaskChart({
     datasets: [
       {
         data: [completedTasks, incompleteTasks],
-        backgroundColor: ["#4ade80", "#374151"], //緑とグレー
-        borderColor: ["#1f2937"], // 背景色
+        backgroundColor: ["#22c55e", "#374151"], // green-500, gray-700
+        borderColor: ["#111827"], // gray-900
         borderWidth: 2,
       },
     ],
@@ -37,7 +37,7 @@ export default function TaskChart({
       legend: {
         position: "top" as const,
         labels: {
-          color: "#e5e7eb", // テキストの色
+          color: "#f3f4f6", // gray-100
         },
       },
       tooltip: {

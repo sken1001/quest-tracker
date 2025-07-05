@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${inter.className} bg-gray-900 text-gray-100`}>
+      <body className={`${inter.className} bg-gray-800 text-gray-100`}>
         <div className="flex min-h-screen">
           {/* ここに、後で左のメニューバーのコードを入れます */}
           <aside className="w-64 flex-shrink-0 bg-gray-800 p-4">
