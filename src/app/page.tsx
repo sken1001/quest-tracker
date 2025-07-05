@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import TaskChart from "@/components/TaskChart";
 
 type TaskCycle = "daily" | "weekly" | "monthly";
@@ -15,6 +15,7 @@ export default function HomePage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskCycle, setNewTaskCycle] = useState<TaskCycle>("daily");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const savedTasks = localStorage.getItem("tasks");
@@ -51,6 +52,47 @@ export default function HomePage() {
 
   const handleDeleteTask = (id: number) => {
     setTasks(tasks.filter((task) => task.id !== id));
+  };
+
+  const handleExportTasks = () => {
+    if (tasks.length === 0) {
+      alert("エクスポートするタスクがありません。");
+      return;
+    }
+    const jsonString = JSON.stringify(tasks, null, 2);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "tasks.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportTasks = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const importedTasks = JSON.parse(event.target?.result as string);
+        if (Array.isArray(importedTasks)) {
+          // ここでより詳細な型ガードを行うことも可能です
+          setTasks(importedTasks);
+          alert("タスクをインポートしました。");
+        } else {
+          alert("無効な形式のJSONファイルです。");
+        }
+      } catch (error) {
+        alert("ファイルの読み込みに失敗しました。");
+        console.error("Failed to parse JSON file:", error);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = ""; // 同じファイルを連続で選択できるようにリセット
   };
 
   const dailyTasks = tasks.filter((task) => task.cycle === "daily");
@@ -129,6 +171,31 @@ export default function HomePage() {
           >
             追加
           </button>
+        </div>
+      </div>
+
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-2">データ管理</h2>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleExportTasks}
+            className="bg-gray-600 text-white px-4 py-1 rounded"
+          >
+            エクスポート
+          </button>
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="bg-gray-600 text-white px-4 py-1 rounded"
+          >
+            インポート
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImportTasks}
+            className="hidden"
+            accept=".json"
+          />
         </div>
       </div>
 
