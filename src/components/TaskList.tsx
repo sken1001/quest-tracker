@@ -1,0 +1,83 @@
+"use client";
+
+// このコンポーネントが必要とするTaskの型定義
+type TaskCycle = "daily" | "weekly" | "monthly";
+type Task = {
+  id: number;
+  title: string;
+  isCompleted: boolean;
+  cycle: TaskCycle;
+};
+
+// このコンポーネントが親から受け取るデータ（props）の型を定義
+type TaskListProps = {
+  tasks: Task[];
+  onToggleComplete: (id: number) => void;
+  onDeleteTask: (id: number) => void;
+};
+
+export default function TaskList({
+  tasks,
+  onToggleComplete,
+  onDeleteTask,
+}: TaskListProps) {
+  // もし表示すべきタスクが一つもなければ、メッセージを表示
+  if (tasks.length === 0) {
+    return <p className="text-gray-500 text-sm mt-2">タスクはありません。</p>;
+  }
+
+  // タスクがあれば、リストを生成して表示
+  return (
+    <ul>
+      {tasks.map((task) => (
+        <li
+          key={task.id}
+          className="flex items-center justify-between mb-2 bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition-colors"
+        >
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              className="form-checkbox h-5 w-5 rounded bg-gray-800 border-gray-600 text-green-500 focus:ring-green-500"
+              checked={task.isCompleted}
+              onChange={() => onToggleComplete(task.id)}
+            />
+            <span
+              className={task.isCompleted ? "line-through text-gray-400" : ""}
+            >
+              {task.title}
+            </span>
+            <span
+              className={`text-xs px-2 py-0.5 rounded-full text-white ${
+                task.cycle === "daily"
+                  ? "bg-teal-800 text-teal-100"
+                  : task.cycle === "weekly"
+                  ? "bg-sky-800 text-sky-100"
+                  : "bg-rose-800 text-rose-100"
+              }`}
+            >
+              {task.cycle}
+            </span>
+          </label>
+          <button
+            onClick={() => onDeleteTask(task.id)}
+            className="text-gray-400 hover:text-red-500 p-1 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+            aria-label={`タスク「${task.title}」を削除`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}

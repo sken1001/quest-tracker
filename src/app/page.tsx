@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import TaskChart from "@/components/TaskChart";
+import TaskList from "@/components/TaskList"; // ← 新しい部品をインポート
 
 type TaskCycle = "daily" | "weekly" | "monthly";
 type Task = {
@@ -30,14 +31,12 @@ export default function HomePage() {
 
   const handleAddTask = () => {
     if (newTaskTitle.trim() === "") return;
-
     const newTask: Task = {
       id: Date.now(),
       title: newTaskTitle,
       isCompleted: false,
       cycle: newTaskCycle,
     };
-
     setTasks([...tasks, newTask]);
     setNewTaskTitle("");
   };
@@ -99,7 +98,7 @@ export default function HomePage() {
       }
     };
     reader.readAsText(file);
-    e.target.value = ""; // 同じファイルを連続で選択できるようにリセット
+    e.target.value = "";
   };
 
   const dailyTasks = tasks.filter((task) => task.cycle === "daily");
@@ -120,7 +119,7 @@ export default function HomePage() {
   };
 
   return (
-    <div>
+    <div className="p-4 sm:p-6 md:p-8">
       <h1 className="text-2xl font-bold mb-4">繰り返しタスク管理アプリ</h1>
 
       <div className="mb-12">
@@ -155,7 +154,6 @@ export default function HomePage() {
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2">タスクを追加</h2>
         <div className="flex items-center gap-2">
-          {" "}
           <input
             type="text"
             value={newTaskTitle}
@@ -206,7 +204,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div>
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-xl font-semibold">デイリータスク</h2>
@@ -231,59 +229,11 @@ export default function HomePage() {
               </svg>
             </button>
           </div>
-          <ul>
-            {dailyTasks.map((task) => (
-              <li
-                key={task.id}
-                className="flex items-center justify-between mb-2 bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox h-5 w-5 rounded bg-gray-800 border-gray-600 text-green-500 focus:ring-green-500"
-                    checked={task.isCompleted}
-                    onChange={() => handleToggleComplete(task.id)}
-                  />
-                  <span
-                    className={
-                      task.isCompleted ? "line-through text-gray-400" : ""
-                    }
-                  >
-                    {task.title}
-                  </span>
-                  <span
-                    className={`text-xs px-2 py-0.5 rounded-full text-white ${
-                      task.cycle === "daily"
-                        ? "bg-teal-800 text-teal-100"
-                        : task.cycle === "weekly"
-                        ? "bg-sky-800 text-sky-100"
-                        : "bg-rose-800 text-rose-100"
-                    }`}
-                  >
-                    {task.cycle}
-                  </span>
-                </label>
-                <button
-                  onClick={() => handleDeleteTask(task.id)}
-                  className="text-gray-400 hover:text-red-500 p-1 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900"
-                  aria-label={`タスク「${task.title}」を削除`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </li>
-            ))}
-          </ul>
+          <TaskList
+            tasks={dailyTasks}
+            onToggleComplete={handleToggleComplete}
+            onDeleteTask={handleDeleteTask}
+          />
         </div>
         <div>
           <div className="flex items-center justify-between mb-2">
@@ -309,59 +259,11 @@ export default function HomePage() {
               </svg>
             </button>
           </div>
-          <ul>
-            {weeklyTasks.map((task) => (
-              <li
-                key={task.id}
-                className="flex items-center justify-between mb-2 bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox h-5 w-5 rounded bg-gray-800 border-gray-600 text-green-500 focus:ring-green-500"
-                    checked={task.isCompleted}
-                    onChange={() => handleToggleComplete(task.id)}
-                  />
-                  <span
-                    className={
-                      task.isCompleted ? "line-through text-gray-400" : ""
-                    }
-                  >
-                    {task.title}
-                  </span>
-                  <span
-                    className={`text-xs px-2 py-0.5 rounded-full text-white ${
-                      task.cycle === "daily"
-                        ? "bg-teal-800 text-teal-100"
-                        : task.cycle === "weekly"
-                        ? "bg-sky-800 text-sky-100"
-                        : "bg-rose-800 text-rose-100"
-                    }`}
-                  >
-                    {task.cycle}
-                  </span>
-                </label>
-                <button
-                  onClick={() => handleDeleteTask(task.id)}
-                  className="text-gray-400 hover:text-red-500 p-1 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900"
-                  aria-label={`タスク「${task.title}」を削除`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </li>
-            ))}
-          </ul>
+          <TaskList
+            tasks={weeklyTasks}
+            onToggleComplete={handleToggleComplete}
+            onDeleteTask={handleDeleteTask}
+          />
         </div>
         <div>
           <div className="flex items-center justify-between mb-2">
@@ -387,59 +289,11 @@ export default function HomePage() {
               </svg>
             </button>
           </div>
-          <ul>
-            {monthlyTasks.map((task) => (
-              <li
-                key={task.id}
-                className="flex items-center justify-between mb-2 bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox h-5 w-5 rounded bg-gray-800 border-gray-600 text-green-500 focus:ring-green-500"
-                    checked={task.isCompleted}
-                    onChange={() => handleToggleComplete(task.id)}
-                  />
-                  <span
-                    className={
-                      task.isCompleted ? "line-through text-gray-400" : ""
-                    }
-                  >
-                    {task.title}
-                  </span>
-                  <span
-                    className={`text-xs px-2 py-0.5 rounded-full text-white ${
-                      task.cycle === "daily"
-                        ? "bg-teal-800 text-teal-100"
-                        : task.cycle === "weekly"
-                        ? "bg-sky-800 text-sky-100"
-                        : "bg-rose-800 text-rose-100"
-                    }`}
-                  >
-                    {task.cycle}
-                  </span>
-                </label>
-                <button
-                  onClick={() => handleDeleteTask(task.id)}
-                  className="text-gray-400 hover:text-red-500 p-1 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900"
-                  aria-label={`タスク「${task.title}」を削除`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </li>
-            ))}
-          </ul>
+          <TaskList
+            tasks={monthlyTasks}
+            onToggleComplete={handleToggleComplete}
+            onDeleteTask={handleDeleteTask}
+          />
         </div>
       </div>
     </div>
