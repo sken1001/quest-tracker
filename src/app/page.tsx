@@ -175,7 +175,7 @@ export default function HomePage() {
           </select>
           <button
             onClick={handleAddTask}
-            className="bg-blue-500 text-white px-4 py-1 rounded"
+            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-400"
           >
             追加
           </button>
@@ -187,13 +187,13 @@ export default function HomePage() {
         <div className="flex items-center gap-2">
           <button
             onClick={handleExportTasks}
-            className="bg-gray-600 text-white px-4 py-1 rounded"
+            className="bg-gray-600 text-white px-4 py-1 rounded hover:bg-gray-500"
           >
             エクスポート
           </button>
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="bg-gray-600 text-white px-4 py-1 rounded"
+            className="bg-gray-600 text-white px-4 py-1 rounded hover:bg-gray-500"
           >
             インポート
           </button>
