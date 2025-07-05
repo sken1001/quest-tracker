@@ -54,6 +54,14 @@ export default function HomePage() {
     setTasks(tasks.filter((task) => task.id !== id));
   };
 
+  const handleResetTasks = (cycle: TaskCycle) => {
+    setTasks(
+      tasks.map((task) =>
+        task.cycle === cycle ? { ...task, isCompleted: false } : task
+      )
+    );
+  };
+
   const handleExportTasks = () => {
     if (tasks.length === 0) {
       alert("エクスポートするタスクがありません。");
@@ -201,7 +209,15 @@ export default function HomePage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <h2 className="text-xl font-semibold mb-2">デイリータスク</h2>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-xl font-semibold">デイリータスク</h2>
+            <button
+              onClick={() => handleResetTasks("daily")}
+              className="bg-gray-600 text-white px-2 py-0.5 text-xs rounded hover:bg-gray-500"
+            >
+              リセット
+            </button>
+          </div>
           <ul>
             {dailyTasks.map((task) => (
               <li
@@ -244,7 +260,15 @@ export default function HomePage() {
           </ul>
         </div>
         <div>
-          <h2 className="text-xl font-semibold mb-2">ウィークリータスク</h2>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-xl font-semibold">ウィークリータスク</h2>
+            <button
+              onClick={() => handleResetTasks("weekly")}
+              className="bg-gray-600 text-white px-2 py-0.5 text-xs rounded hover:bg-gray-500"
+            >
+              リセット
+            </button>
+          </div>
           <ul>
             {weeklyTasks.map((task) => (
               <li
@@ -287,7 +311,15 @@ export default function HomePage() {
           </ul>
         </div>
         <div>
-          <h2 className="text-xl font-semibold mb-2">マンスリータスク</h2>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-xl font-semibold">マンスリータスク</h2>
+            <button
+              onClick={() => handleResetTasks("monthly")}
+              className="bg-gray-600 text-white px-2 py-0.5 text-xs rounded hover:bg-gray-500"
+            >
+              リセット
+            </button>
+          </div>
           <ul>
             {monthlyTasks.map((task) => (
               <li
