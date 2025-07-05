@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import TaskChart from "@/components/TaskChart";
-import TaskList from "@/components/TaskList"; // ← 新しい部品をインポート
+import TaskList from "@/components/TaskList";
+import type { Task, TaskCycle } from "@/types/task";
 
 type TaskCycle = "daily" | "weekly" | "monthly";
 type Task = {
@@ -205,96 +206,30 @@ export default function HomePage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl font-semibold">デイリータスク</h2>
-            <button
-              onClick={() => handleResetTasks("daily")}
-              className="text-gray-300 hover:text-white p-1 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-950"
-              aria-label="デイリータスクをリセット"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
-                />
-              </svg>
-            </button>
-          </div>
-          <TaskList
-            tasks={dailyTasks}
-            onToggleComplete={handleToggleComplete}
-            onDeleteTask={handleDeleteTask}
-          />
-        </div>
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl font-semibold">ウィークリータスク</h2>
-            <button
-              onClick={() => handleResetTasks("weekly")}
-              className="text-gray-300 hover:text-white p-1 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-950"
-              aria-label="ウィークリータスクをリセット"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
-                />
-              </svg>
-            </button>
-          </div>
-          <TaskList
-            tasks={weeklyTasks}
-            onToggleComplete={handleToggleComplete}
-            onDeleteTask={handleDeleteTask}
-          />
-        </div>
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl font-semibold">マンスリータスク</h2>
-            <button
-              onClick={() => handleResetTasks("monthly")}
-              className="text-gray-300 hover:text-white p-1 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-950"
-              aria-label="マンスリータスクをリセット"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-5 h-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
-                />
-              </svg>
-            </button>
-          </div>
-          <TaskList
-            tasks={monthlyTasks}
-            onToggleComplete={handleToggleComplete}
-            onDeleteTask={handleDeleteTask}
-          />
-        </div>
+        <TaskList
+          title="デイリータスク"
+          tasks={dailyTasks}
+          cycle="daily"
+          onToggleComplete={handleToggleComplete}
+          onDeleteTask={handleDeleteTask}
+          onResetTasks={handleResetTasks}
+        />
+        <TaskList
+          title="ウィークリータスク"
+          tasks={weeklyTasks}
+          cycle="weekly"
+          onToggleComplete={handleToggleComplete}
+          onDeleteTask={handleDeleteTask}
+          onResetTasks={handleResetTasks}
+        />
+        <TaskList
+          title="マンスリータスク"
+          tasks={monthlyTasks}
+          cycle="monthly"
+          onToggleComplete={handleToggleComplete}
+          onDeleteTask={handleDeleteTask}
+          onResetTasks={handleResetTasks}
+        />
       </div>
     </div>
   );
