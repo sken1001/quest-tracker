@@ -29,7 +29,7 @@ export default function HomePage() {
   // Helper function to get the reset point for a given cycle
   const getCycleResetPoint = (cycle: TaskCycle, task: Task): Date => {
     const now = new Date();
-    let resetPoint = new Date();
+    const resetPoint = new Date();
 
     if (cycle === "daily") {
       resetPoint.setHours(task.deadlineHour ?? 0, 0, 0, 0);
@@ -62,7 +62,7 @@ export default function HomePage() {
   // Helper function to get the deadline for the *next* cycle
   const getNextCycleDeadline = (cycle: TaskCycle, task: Task): Date => {
     const now = new Date();
-    let nextDeadline = new Date();
+    const nextDeadline = new Date();
 
     if (cycle === "daily") {
       nextDeadline.setHours(task.deadlineHour ?? 0, 0, 0, 0);
@@ -137,8 +137,10 @@ export default function HomePage() {
       cycle: newTaskCycle,
       deadline: deadline?.toISOString(),
       deadlineHour: deadlineHour,
-      deadlineDayOfWeek: newTaskCycle === "weekly" ? newDeadlineDayOfWeek : undefined,
-      deadlineDayOfMonth: newTaskCycle === "monthly" ? newDeadlineDayOfMonth : undefined,
+      deadlineDayOfWeek:
+        newTaskCycle === "weekly" ? newDeadlineDayOfWeek : undefined,
+      deadlineDayOfMonth:
+        newTaskCycle === "monthly" ? newDeadlineDayOfMonth : undefined,
     };
     setTasks([...tasks, newTask]);
     setNewTaskTitle("");
@@ -159,13 +161,17 @@ export default function HomePage() {
   const handleResetTasks = (cycle: TaskCycle) => {
     const now = new Date();
 
-    setTasks(prevTasks =>
-      prevTasks.map(task => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => {
         if (task.cycle === cycle) {
           const resetPoint = getCycleResetPoint(cycle, task); // Pass the task object
           if (now >= resetPoint) {
             const newDeadline = getNextCycleDeadline(cycle, task); // Pass the task object
-            return { ...task, isCompleted: false, deadline: newDeadline.toISOString() };
+            return {
+              ...task,
+              isCompleted: false,
+              deadline: newDeadline.toISOString(),
+            };
           } else {
             // If not yet time to reset, keep the task as is
             return task;
@@ -176,12 +182,14 @@ export default function HomePage() {
     );
 
     // Provide feedback for each cycle type if no tasks were reset or if it's not yet time
-    const tasksToReset = tasks.filter(task => task.cycle === cycle);
+    const tasksToReset = tasks.filter((task) => task.cycle === cycle);
     if (tasksToReset.length > 0) {
       const firstTask = tasksToReset[0]; // Just pick one to get the reset point for the alert
       const resetPointForAlert = getCycleResetPoint(cycle, firstTask);
       if (now < resetPointForAlert) {
-        alert(`${cycle}タスクはまだリセットできません。次のリセットは${resetPointForAlert.toLocaleString()}です。`);
+        alert(
+          `${cycle}タスクはまだリセットできません。次のリセットは${resetPointForAlert.toLocaleString()}です。`
+        );
       }
     } else {
       // No tasks for this cycle, so nothing to reset
@@ -324,7 +332,10 @@ export default function HomePage() {
               ))}
             </select>
           )}
-          <DeadlineHourSelector selectedHour={deadlineHour} onChange={setDeadlineHour} />
+          <DeadlineHourSelector
+            selectedHour={deadlineHour}
+            onChange={setDeadlineHour}
+          />
           <button
             onClick={handleAddTask}
             className="bg-gray-600 text-white px-4 py-2 rounded font-semibold hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-950 transition-colors"

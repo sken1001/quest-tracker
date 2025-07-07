@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -25,33 +26,33 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         <nav>
           <ul>
             <li className="mb-2">
-              <a
+              <Link
                 href="/"
                 className="text-gray-300 hover:text-white font-semibold text-lg"
               >
                 ホーム
-              </a>
+              </Link>
             </li>
             <li className="mb-2">
-              <a href="/about" className="text-gray-300 hover:text-white">
+              <Link href="/about" className="text-gray-300 hover:text-white">
                 このアプリについて
-              </a>
+              </Link>
             </li>
-            <li className="mb-2">
-              <a href="/help" className="text-gray-300 hover:text-white">
+            {/* <li className="mb-2">
+              <Link href="/help" className="text-gray-300 hover:text-white">
                 ヘルプ
-              </a>
+              </Link>
             </li>
             <li className="mb-2">
-              <a href="/terms" className="text-gray-300 hover:text-white">
+              <Link href="/terms" className="text-gray-300 hover:text-white">
                 利用規約
-              </a>
+              </Link>
             </li>
             <li className="mb-2">
-              <a href="/privacy" className="text-gray-300 hover:text-white">
+              <Link href="/privacy" className="text-gray-300 hover:text-white">
                 プライバシーポリシー
-              </a>
-            </li>
+              </Link>
+            </li> */}
           </ul>
         </nav>
       </aside>
