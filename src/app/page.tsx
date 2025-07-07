@@ -3,12 +3,14 @@
 import { useState, useEffect, useRef } from "react";
 import TaskChart from "@/components/TaskChart";
 import TaskList from "@/components/TaskList";
+import DeadlineHourSelector from "@/components/DeadlineHourSelector";
 import type { Task, TaskCycle } from "@/types/task";
 
 export default function HomePage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskCycle, setNewTaskCycle] = useState<TaskCycle>("daily");
+  const [deadlineHour, setDeadlineHour] = useState<number | null>(5);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -24,11 +26,38 @@ export default function HomePage() {
 
   const handleAddTask = () => {
     if (newTaskTitle.trim() === "") return;
+
+    const now = new Date();
+    let deadline: Date | undefined = undefined;
+
+    if (deadlineHour !== null) {
+      deadline = new Date();
+      deadline.setHours(deadlineHour, 0, 0, 0);
+
+      switch (newTaskCycle) {
+        case "daily":
+          if (now > deadline) {
+            deadline.setDate(deadline.getDate() + 1);
+          }
+          break;
+        case "weekly":
+          const dayOfWeek = now.getDay();
+          const daysUntilEndOfWeek = 6 - dayOfWeek;
+          deadline.setDate(now.getDate() + daysUntilEndOfWeek);
+          break;
+        case "monthly":
+          deadline.setMonth(deadline.getMonth() + 1, 0);
+          break;
+      }
+    }
+
     const newTask: Task = {
       id: Date.now(),
       title: newTaskTitle,
       isCompleted: false,
       cycle: newTaskCycle,
+      deadline: deadline?.toISOString(),
+      deadlineHour: deadlineHour,
     };
     setTasks([...tasks, newTask]);
     setNewTaskTitle("");
@@ -163,6 +192,7 @@ export default function HomePage() {
             <option value="weekly">ウィークリー</option>
             <option value="monthly">マンスリー</option>
           </select>
+          <DeadlineHourSelector selectedHour={deadlineHour} onChange={setDeadlineHour} />
           <button
             onClick={handleAddTask}
             className="bg-gray-600 text-white px-4 py-2 rounded font-semibold hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-950 transition-colors"

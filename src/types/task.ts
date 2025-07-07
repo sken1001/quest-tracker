@@ -7,4 +7,6 @@ export type Task = {
   title: string;
   isCompleted: boolean;
   cycle: TaskCycle;
+  deadline?: string; // ISO 8601 format string
+  deadlineHour?: number | null;
 };

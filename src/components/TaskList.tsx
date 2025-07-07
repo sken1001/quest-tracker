@@ -14,6 +14,23 @@ type TaskListProps = {
   onResetTasks: (cycle: TaskCycle) => void;
 };
 
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const isToday = date.getDate() === now.getDate() &&
+                  date.getMonth() === now.getMonth() &&
+                  date.getFullYear() === now.getFullYear();
+
+  const day = date.getDate();
+  const hours = `0${date.getHours()}`.slice(-2);
+  const minutes = `0${date.getMinutes()}`.slice(-2);
+
+  if (isToday) {
+    return `今日 ${hours}:${minutes}`;
+  }
+  return `${date.getMonth() + 1}/${day} ${hours}:${minutes}`;
+}
+
 export default function TaskList({
   title,
   tasks,
@@ -52,7 +69,9 @@ export default function TaskList({
         <p className="text-gray-500 text-sm mt-2">タスクはありません。</p>
       ) : (
         <ul>
-          {tasks.map((task) => (
+          {tasks.map((task) => {
+            const isOverdue = task.deadline && new Date(task.deadline) < new Date() && !task.isCompleted;
+            return (
             <li
               key={task.id}
               className="flex items-center justify-between mb-2 bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition-colors"
@@ -74,6 +93,11 @@ export default function TaskList({
                 }`}>
                   {task.cycle}
                 </span>
+                {task.deadline && (
+                  <span className={`text-xs ${isOverdue ? 'text-red-400' : 'text-gray-400'}`}>
+                    {formatDate(task.deadline)}
+                  </span>
+                )}
               </label>
               <button
                 onClick={() => onDeleteTask(task.id)}
@@ -94,7 +118,7 @@ export default function TaskList({
                 </svg>
               </button>
             </li>
-          ))}
+          )})}
         </ul>
       )}
     </div>
