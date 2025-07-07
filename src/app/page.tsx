@@ -281,12 +281,12 @@ export default function HomePage() {
 
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-2">タスクを追加</h2>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <input
             type="text"
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
-            className="border border-gray-700 rounded px-3 py-2 text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-colors"
+            className="border border-gray-700 rounded px-3 py-2 text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-colors w-full sm:w-auto"
             placeholder="新しいタスクを入力"
           />
           <select
@@ -336,7 +336,7 @@ export default function HomePage() {
 
       <div className="mb-10">
         <h2 className="text-xl font-semibold mb-2">データ管理</h2>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={handleExportTasks}
             className="bg-gray-800 text-white px-4 py-2 rounded font-semibold hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-2 focus:ring-offset-gray-950 transition-colors"
