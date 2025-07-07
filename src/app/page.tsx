@@ -5,14 +5,6 @@ import TaskChart from "@/components/TaskChart";
 import TaskList from "@/components/TaskList";
 import type { Task, TaskCycle } from "@/types/task";
 
-type TaskCycle = "daily" | "weekly" | "monthly";
-type Task = {
-  id: number;
-  title: string;
-  isCompleted: boolean;
-  cycle: TaskCycle;
-};
-
 export default function HomePage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState("");
