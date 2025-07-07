@@ -1,5 +1,3 @@
-// src/types/task.ts
-
 export type TaskCycle = "daily" | "weekly" | "monthly";
 
 export type Task = {
@@ -7,6 +5,8 @@ export type Task = {
   title: string;
   isCompleted: boolean;
   cycle: TaskCycle;
-  deadline?: string; // ISO 8601 format string
+  deadline?: string;
   deadlineHour?: number | null;
+  deadlineDayOfWeek?: number;
+  deadlineDayOfMonth?: number;
 };

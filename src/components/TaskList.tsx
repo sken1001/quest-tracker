@@ -1,10 +1,7 @@
-// src/components/TaskList.tsx
-
 'use client';
 
-import type { Task, TaskCycle } from "@/types/task"; // ← 型を共通ファイルからインポート
+import type { Task, TaskCycle } from "@/types/task";
 
-// このコンポーネントが親から受け取るデータ（props）の型を更新
 type TaskListProps = {
   title: string;
   tasks: Task[];
@@ -93,6 +90,16 @@ export default function TaskList({
                 }`}>
                   {task.cycle}
                 </span>
+                {task.cycle === "weekly" && task.deadlineDayOfWeek !== undefined && (
+                  <span className="text-xs text-gray-400">
+                    ({["日", "月", "火", "水", "木", "金", "土"][task.deadlineDayOfWeek]}曜日)
+                  </span>
+                )}
+                {task.cycle === "monthly" && task.deadlineDayOfMonth !== undefined && (
+                  <span className="text-xs text-gray-400">
+                    ({task.deadlineDayOfMonth}日)
+                  </span>
+                )}
                 {task.deadline && (
                   <span className={`text-xs ${isOverdue ? 'text-red-400' : 'text-gray-400'}`}>
                     {formatDate(task.deadline)}

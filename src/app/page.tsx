@@ -11,6 +11,8 @@ export default function HomePage() {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskCycle, setNewTaskCycle] = useState<TaskCycle>("daily");
   const [deadlineHour, setDeadlineHour] = useState<number | null>(5);
+  const [newDeadlineDayOfWeek, setNewDeadlineDayOfWeek] = useState<number>(0);
+  const [newDeadlineDayOfMonth, setNewDeadlineDayOfMonth] = useState<number>(1);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -23,6 +25,70 @@ export default function HomePage() {
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
+
+  // Helper function to get the reset point for a given cycle
+  const getCycleResetPoint = (cycle: TaskCycle, task: Task): Date => {
+    const now = new Date();
+    let resetPoint = new Date();
+
+    if (cycle === "daily") {
+      resetPoint.setHours(task.deadlineHour ?? 0, 0, 0, 0);
+      if (now < resetPoint) {
+        resetPoint.setDate(resetPoint.getDate() - 1);
+      }
+    } else if (cycle === "weekly") {
+      const targetDayOfWeek = task.deadlineDayOfWeek ?? 0;
+      const currentDay = now.getDay();
+      let daysUntilTargetDay = targetDayOfWeek - currentDay;
+      if (daysUntilTargetDay < 0) {
+        daysUntilTargetDay += 7;
+      }
+      resetPoint.setDate(now.getDate() + daysUntilTargetDay);
+      resetPoint.setHours(24, 0, 0, 0);
+      if (now < resetPoint) {
+        resetPoint.setDate(resetPoint.getDate() - 7);
+      }
+    } else if (cycle === "monthly") {
+      const targetDayOfMonth = task.deadlineDayOfMonth ?? 1;
+      resetPoint.setDate(targetDayOfMonth);
+      resetPoint.setHours(24, 0, 0, 0);
+      if (now < resetPoint) {
+        resetPoint.setMonth(resetPoint.getMonth() - 1);
+      }
+    }
+    return resetPoint;
+  };
+
+  // Helper function to get the deadline for the *next* cycle
+  const getNextCycleDeadline = (cycle: TaskCycle, task: Task): Date => {
+    const now = new Date();
+    let nextDeadline = new Date();
+
+    if (cycle === "daily") {
+      nextDeadline.setHours(task.deadlineHour ?? 0, 0, 0, 0);
+      nextDeadline.setDate(nextDeadline.getDate() + 1);
+    } else if (cycle === "weekly") {
+      const targetDayOfWeek = task.deadlineDayOfWeek ?? 0;
+      const currentDay = now.getDay();
+      let daysUntilTargetDay = targetDayOfWeek - currentDay;
+      if (daysUntilTargetDay < 0) {
+        daysUntilTargetDay += 7;
+      }
+      nextDeadline.setDate(now.getDate() + daysUntilTargetDay);
+      nextDeadline.setHours(task.deadlineHour ?? 0, 0, 0, 0);
+      if (now > nextDeadline) {
+        nextDeadline.setDate(nextDeadline.getDate() + 7);
+      }
+    } else if (cycle === "monthly") {
+      const targetDayOfMonth = task.deadlineDayOfMonth ?? 1;
+      nextDeadline.setDate(targetDayOfMonth);
+      nextDeadline.setHours(task.deadlineHour ?? 0, 0, 0, 0);
+      if (now > nextDeadline) {
+        nextDeadline.setMonth(nextDeadline.getMonth() + 1);
+      }
+    }
+    return nextDeadline;
+  };
 
   const handleAddTask = () => {
     if (newTaskTitle.trim() === "") return;
@@ -41,12 +107,25 @@ export default function HomePage() {
           }
           break;
         case "weekly":
-          const dayOfWeek = now.getDay();
-          const daysUntilEndOfWeek = 6 - dayOfWeek;
-          deadline.setDate(now.getDate() + daysUntilEndOfWeek);
+          const targetDayOfWeek = newDeadlineDayOfWeek;
+          const currentDay = now.getDay();
+          let daysUntilTargetDay = targetDayOfWeek - currentDay;
+          if (daysUntilTargetDay < 0) {
+            daysUntilTargetDay += 7;
+          }
+          deadline.setDate(now.getDate() + daysUntilTargetDay);
+          deadline.setHours(deadlineHour, 0, 0, 0);
+          if (now > deadline) {
+            deadline.setDate(deadline.getDate() + 7);
+          }
           break;
         case "monthly":
-          deadline.setMonth(deadline.getMonth() + 1, 0);
+          const targetDayOfMonth = newDeadlineDayOfMonth;
+          deadline.setDate(targetDayOfMonth);
+          deadline.setHours(deadlineHour, 0, 0, 0);
+          if (now > deadline) {
+            deadline.setMonth(deadline.getMonth() + 1);
+          }
           break;
       }
     }
@@ -58,6 +137,8 @@ export default function HomePage() {
       cycle: newTaskCycle,
       deadline: deadline?.toISOString(),
       deadlineHour: deadlineHour,
+      deadlineDayOfWeek: newTaskCycle === "weekly" ? newDeadlineDayOfWeek : undefined,
+      deadlineDayOfMonth: newTaskCycle === "monthly" ? newDeadlineDayOfMonth : undefined,
     };
     setTasks([...tasks, newTask]);
     setNewTaskTitle("");
@@ -76,11 +157,36 @@ export default function HomePage() {
   };
 
   const handleResetTasks = (cycle: TaskCycle) => {
-    setTasks(
-      tasks.map((task) =>
-        task.cycle === cycle ? { ...task, isCompleted: false } : task
-      )
+    const now = new Date();
+
+    setTasks(prevTasks =>
+      prevTasks.map(task => {
+        if (task.cycle === cycle) {
+          const resetPoint = getCycleResetPoint(cycle, task); // Pass the task object
+          if (now >= resetPoint) {
+            const newDeadline = getNextCycleDeadline(cycle, task); // Pass the task object
+            return { ...task, isCompleted: false, deadline: newDeadline.toISOString() };
+          } else {
+            // If not yet time to reset, keep the task as is
+            return task;
+          }
+        }
+        return task;
+      })
     );
+
+    // Provide feedback for each cycle type if no tasks were reset or if it's not yet time
+    const tasksToReset = tasks.filter(task => task.cycle === cycle);
+    if (tasksToReset.length > 0) {
+      const firstTask = tasksToReset[0]; // Just pick one to get the reset point for the alert
+      const resetPointForAlert = getCycleResetPoint(cycle, firstTask);
+      if (now < resetPointForAlert) {
+        alert(`${cycle}タスクはまだリセットできません。次のリセットは${resetPointForAlert.toLocaleString()}です。`);
+      }
+    } else {
+      // No tasks for this cycle, so nothing to reset
+      // alert(`この${cycle}サイクルにはタスクがありません。`);
+    }
   };
 
   const handleExportTasks = () => {
@@ -192,6 +298,32 @@ export default function HomePage() {
             <option value="weekly">ウィークリー</option>
             <option value="monthly">マンスリー</option>
           </select>
+          {newTaskCycle === "weekly" && (
+            <select
+              value={newDeadlineDayOfWeek}
+              onChange={(e) => setNewDeadlineDayOfWeek(Number(e.target.value))}
+              className="border border-gray-700 rounded px-3 py-2 text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-colors"
+            >
+              <option value={0}>日曜日</option>
+              <option value={1}>月曜日</option>
+              <option value={2}>火曜日</option>
+              <option value={3}>水曜日</option>
+              <option value={4}>木曜日</option>
+              <option value={5}>金曜日</option>
+              <option value={6}>土曜日</option>
+            </select>
+          )}
+          {newTaskCycle === "monthly" && (
+            <select
+              value={newDeadlineDayOfMonth}
+              onChange={(e) => setNewDeadlineDayOfMonth(Number(e.target.value))}
+              className="border border-gray-700 rounded px-3 py-2 text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-colors"
+            >
+              {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
+                <option key={day} value={day}>{`${day}日`}</option>
+              ))}
+            </select>
+          )}
           <DeadlineHourSelector selectedHour={deadlineHour} onChange={setDeadlineHour} />
           <button
             onClick={handleAddTask}
