@@ -1,5 +1,6 @@
 export default function AboutPage() {
   return (
+    <>
     <div className="p-4 sm:p-6 md:p-8">
       <h1 className="text-2xl font-bold mb-4">このアプリについて</h1>
       <div className="prose prose-invert max-w-none">
@@ -19,5 +20,6 @@ export default function AboutPage() {
         </ul>
       </div>
     </div>
+    </>
   );
 }
