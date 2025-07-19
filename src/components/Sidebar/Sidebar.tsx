@@ -34,6 +34,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
               </Link>
             </li>
             <li className="mb-2">
+              <Link
+                href="/damage-calculator"
+                className="text-gray-300 hover:text-white"
+              >
+                ダメージ計算機
+              </Link>
+            </li>
+            <li className="mb-2">
               <Link href="/about" className="text-gray-300 hover:text-white">
                 このアプリについて
               </Link>
