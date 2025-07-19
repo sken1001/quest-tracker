@@ -35,14 +35,14 @@ const calculateFinalDamage = (baseDamage: number, resist: number, ignore: number
 };
 
 export default function DamageCalculatorPage() {
-  const [baseDamage, setBaseDamage] = useState(30);
+  const [baseDamage, setBaseDamage] = useState("30");
   const [resist, setResist] = useState("0.85");
   const [ignore, setIgnore] = useState("0");
   const [partyIgnore, setPartyIgnore] = useState("0");
 
   const GIGA = 1_000_000_000;
   const totalIgnore = Math.min(1, parseFloat(ignore) + parseFloat(partyIgnore)); // 合計が100%を超えないように
-  const finalDamage = calculateFinalDamage(baseDamage * GIGA, parseFloat(resist), totalIgnore);
+  const finalDamage = calculateFinalDamage((parseFloat(baseDamage) || 0) * GIGA, parseFloat(resist), totalIgnore);
 
   return (
     <main className="p-8">
@@ -57,9 +57,15 @@ export default function DamageCalculatorPage() {
           </label>
           <input
             id="baseDamage"
-            type="number"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             value={baseDamage}
-            onChange={(e) => setBaseDamage(parseFloat(e.target.value) || 0)}
+            onChange={(e) => {
+              const value = e.target.value;
+              const sanitizedValue = value.replace(/[^0-9]/g, '');
+              setBaseDamage(sanitizedValue);
+            }}
             className="p-2 w-full border border-gray-300 rounded-md bg-white dark:bg-gray-800 dark:border-gray-600"
           />
           <p className="text-sm text-gray-500 mt-2">
