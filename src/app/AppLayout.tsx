@@ -8,8 +8,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    const isDesktop = window.matchMedia('(min-width: 768px)').matches;
-    setSidebarOpen(isDesktop);
+    const handleResize = () => {
+      setSidebarOpen(window.innerWidth > 1280);
+    };
+
+    // Set initial state
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const toggleSidebar = () => {
