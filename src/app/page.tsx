@@ -258,7 +258,7 @@ export default function HomePage() {
     <div className="p-4 sm:p-6 md:p-8">
       <h1 className="text-2xl font-bold mb-4">ダッシュボード</h1>
 
-      <div className="mb-12">
+      <div className="mb-12 hidden md:block">
         <h2 className="text-xl font-semibold mb-4">達成状況</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
