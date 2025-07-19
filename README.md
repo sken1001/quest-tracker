@@ -3,7 +3,7 @@
 https://task-tracker-six-red-48.vercel.app/
 (テスト公開)
 
-日々の繰り返しタスク（デイリー、ウィークリー、マンスリー）を管理し、達成状況を可視化することで、日々の生活をサポートするためのWebアプリケーションです。
+日々の繰り返しタスク（デイリー、ウィークリー、マンスリー）を管理し、達成状況を可視化することで、日々の生活をサポートするための Web アプリケーションです。
 
 主な機能
 
@@ -27,6 +27,10 @@ https://task-tracker-six-red-48.vercel.app/
 
         Chart.jsを使用し、周期ごとのタスク達成率をドーナツグラフで直感的に把握できます。
 
+    (New)ダメージ計算シュミレータページ追加:
+
+        複雑していたダメージ計算をわかりやすくするために作成。
+
 今後のロードマップ
 
 現在は、ブラウザのローカルストレージで動作する基本機能が実装されています。
@@ -38,7 +42,7 @@ https://task-tracker-six-red-48.vercel.app/
 
     カテゴリ管理機能: タスクを「仕事」「プライベート」などに分類する機能。
 
-🛠️ 使用技術
+使用技術
 
     フレームワーク: Next.js (App Router)
 
@@ -48,20 +52,20 @@ https://task-tracker-six-red-48.vercel.app/
 
     データ可視化: Chart.js
 
-    デプロイ: Vercel（予定）
+    デプロイ: Vercel
 
-🚀 ローカル環境での起動方法
+ローカル環境での起動方法
 
 このリポジトリをクローンします。
 
     git clone https://github.com/sken1001/quest-tracker.git
 
 プロジェクトディレクトリに移動します。
-    
+
     cd quest-tracker
-    
+
 必要なパッケージをインストールします。
-    
+
     npm install
 
 開発サーバーを起動します。
@@ -69,4 +73,3 @@ https://task-tracker-six-red-48.vercel.app/
     npm run dev
 
 ブラウザで http://localhost:3000 を開きます。
-
