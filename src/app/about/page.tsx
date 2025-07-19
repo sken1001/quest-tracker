@@ -5,8 +5,8 @@ export default function AboutPage() {
         <h1 className="text-2xl font-bold mb-4">このアプリについて</h1>
         <div className="prose prose-invert max-w-none">
           <p>
-            Task
-            Trackerは、日々の繰り返しタスクを管理し、あなたの目標達成をサポートするアプリケーションです。
+            Quest
+            Hubは、日々のタスク管理や、ゲームプレイに役立つツール（ダメージ計算機など）を提供し、あなたの目標達成をサポートするアプリケーションです。
             <br />
             現在、ログインなしで全ての基本機能が動作する、クライアントサイド完結型です。
           </p>

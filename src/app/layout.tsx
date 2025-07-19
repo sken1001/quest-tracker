@@ -6,8 +6,8 @@ import AppLayout from "./AppLayout";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "TaskTraker",
-  description: "日々のタスクを管理しよう",
+  title: "Quest Hub",
+  description: "クエスト達成をサポート",
 };
 
 export default function RootLayout({
