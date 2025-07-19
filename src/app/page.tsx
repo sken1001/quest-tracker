@@ -256,7 +256,7 @@ export default function HomePage() {
 
   return (
     <div className="p-4 sm:p-6 md:p-8">
-      <h1 className="text-2xl font-bold mb-4">繰り返しタスク管理アプリ</h1>
+      <h1 className="text-2xl font-bold mb-4">ダッシュボード</h1>
 
       <div className="mb-12">
         <h2 className="text-xl font-semibold mb-4">達成状況</h2>
