@@ -18,7 +18,16 @@ export default function HomePage() {
   useEffect(() => {
     const savedTasks = localStorage.getItem("tasks");
     if (savedTasks) {
-      setTasks(JSON.parse(savedTasks));
+      const loadedTasks = JSON.parse(savedTasks);
+      const updatedTasks = loadedTasks.map((task: Task) => {
+        // Update the deadline to the next cycle's deadline
+        const newDeadline = getNextCycleDeadline(task.cycle, task);
+        return {
+          ...task,
+          deadline: newDeadline.toISOString(),
+        };
+      });
+      setTasks(updatedTasks);
     }
   }, []);
 
