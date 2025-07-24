@@ -223,7 +223,14 @@ export default function HomePage() {
       try {
         const importedTasks = JSON.parse(event.target?.result as string);
         if (Array.isArray(importedTasks)) {
-          setTasks(importedTasks);
+          const updatedTasks = importedTasks.map((task: Task) => {
+            const newDeadline = getNextCycleDeadline(task.cycle, task);
+            return {
+              ...task,
+              deadline: newDeadline.toISOString(),
+            };
+          });
+          setTasks(updatedTasks);
           alert("タスクをインポートしました。");
         } else {
           alert("無効な形式のJSONファイルです。");
