@@ -80,7 +80,7 @@ export default function TaskList({
                   checked={task.isCompleted}
                   onChange={() => onToggleComplete(task.id)}
                 />
-                <span className={`flex-grow min-w-0 truncate ${task.isCompleted ? "line-through text-gray-400" : ""}`}>
+                <span className={`flex-grow min-w-0 truncate ${task.isCompleted ? "line-through text-gray-400" : ""}`} title={task.title}>
                   {task.title}
                 </span>
               </label>
