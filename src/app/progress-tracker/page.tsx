@@ -79,10 +79,9 @@ const ProgressTracker: React.FC = () => {
 
   const exportToJson = () => {
     const dataStr = JSON.stringify(items, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    const exportFileDefaultName = 'progress-data.json';
-    let linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
+    const url = URL.createObjectURL(blob);
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', url);
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
   }
