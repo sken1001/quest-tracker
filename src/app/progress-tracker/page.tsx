@@ -2,11 +2,8 @@
 
 import React, { useState, ChangeEvent, useEffect } from "react";
 import { ProgressItem, ProgressState } from "@/types/progress";
-import type { TableColumn } from "react-data-table-component";
+import DataTable, { type TableColumn } from "react-data-table-component";
 import { createTheme } from "react-data-table-component";
-
-// Dynamically import DataTable to ensure it's only loaded on the client side
-const DataTable = React.lazy(() => import("react-data-table-component"));
 
 createTheme(
   "dark",
@@ -256,17 +253,15 @@ const ProgressTracker: React.FC = () => {
         </div>
       </div>
 
-      <React.Suspense fallback={<div>テーブルを読み込み中...</div>}>
-        <DataTable<ProgressItem>
-          columns={columns}
-          data={filteredItems}
-          pagination
-          paginationPerPage={100}
-          paginationRowsPerPageOptions={[10, 20, 50, 100]}
-          persistTableHead
-          theme="dark"
-        />
-      </React.Suspense>
+      <DataTable<ProgressItem>
+        columns={columns}
+        data={filteredItems}
+        pagination
+        paginationPerPage={100}
+        paginationRowsPerPageOptions={[10, 20, 50, 100]}
+        persistTableHead
+        theme="dark"
+      />
     </div>
   );
 };
