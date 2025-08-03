@@ -35,6 +35,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             </li>
             <li className="mb-2">
               <Link
+                href="/progress-tracker"
+                className="text-gray-300 hover:text-white"
+              >
+                進捗トラッカー
+              </Link>
+            </li>
+            <li className="mb-2">
+              <Link
                 href="/damage-calculator"
                 className="text-gray-300 hover:text-white"
               >
