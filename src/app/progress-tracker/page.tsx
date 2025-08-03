@@ -206,7 +206,7 @@ const ProgressTracker: React.FC = () => {
 
       <React.Suspense fallback={<div>テーブルを読み込み中...</div>}>
         <DataTable
-          columns={columns}
+          columns={columns as TableColumn<any>[]}
           data={filteredItems}
           pagination
           paginationPerPage={100}
