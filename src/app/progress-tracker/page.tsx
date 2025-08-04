@@ -117,11 +117,13 @@ const ProgressTracker: React.FC = () => {
       name: "項目名",
       selector: (row: ProgressItem) => row.name,
       sortable: true,
+      grow: 1,
     },
     {
       name: "種別",
       selector: (row: ProgressItem) => row.type,
       sortable: true,
+      grow: 1,
     },
     {
       name: "進捗",
@@ -144,6 +146,7 @@ const ProgressTracker: React.FC = () => {
         );
       },
       sortable: true,
+      grow: 2,
     },
     {
       name: "完了",
@@ -157,6 +160,8 @@ const ProgressTracker: React.FC = () => {
           className="checkbox"
         />
       ),
+      grow: 0,
+      width: "80px",
     },
     {
       name: "",
@@ -179,6 +184,8 @@ const ProgressTracker: React.FC = () => {
           </svg>
         </button>
       ),
+      grow: 0,
+      width: "60px",
     },
   ];
 
